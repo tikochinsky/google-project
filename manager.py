@@ -1,11 +1,11 @@
 from data import Data
-from auto_complete_methods import get_best_k_completions
+from auto_complete_methods import get_best_k_completions, get_input, print_result
 
 
 def auto_complete(data):
-    # curr_input = get_input() #generator of input
-    result = get_best_k_completions(curr_input)
-    # output(result)
+    for curr_input in get_input():
+        result = get_best_k_completions(data, curr_input, 5)
+        print_result(result)
 
 
 auto_complete.last_input = ""
