@@ -3,6 +3,7 @@ from initialization import manipulate_data
 from manager import start_app
 
 
-data = Data()
-manipulate_data(data)
-start_app(data)
+if __name__ == '__main__':
+    data = Data()
+    manipulate_data(data)
+    start_app(data)

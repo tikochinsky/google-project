@@ -1,13 +1,11 @@
 from sentence_descriptor import SentenceDescriptor
+import re
 
-alphabet = set()
 
-
-def clean_string(_input):
-    _input.replace(",", " ")
-    while "  " in _input:
-        _input.replace("  ", " ")
-    return _input.lower()
+def clean_string(string):
+    string = re.sub(' +', ' ', string)
+    string = string.lower().replace("  ", " ",len(string))
+    return re.sub(r'[^a-z0-9 ]', '', string)
 
 
 # list of Sentences
