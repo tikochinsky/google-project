@@ -1,4 +1,3 @@
-from sentence import Sentence
 
 
 class AutoCompleteData:
@@ -9,9 +8,9 @@ class AutoCompleteData:
         self.__score = score
 
     def get_completed_sentence(self):
-        return self.__completed_sentence.get_sentence()
+        return self.__completed_sentence
 
-    def get_sentence_url(self):
-        return self.__completed_sentence.get_url()
+    def get_sentence_source(self):
+        return self.__source_text
 
     # methods that you need to define by yourself

@@ -1,29 +1,54 @@
-from data import Data, SubstringsDict, Sentences
-from sentence import Sentence
+from data import Data, SubstringsDict, Sentences, clean_string
+import os
+
+from data import alphabet
 
 
 def fill_sentences(data):
     sentences = data.get_sentences()
     sentences.insert("To be or not to be, that's the question", "dir1/dir2/file1")
     sentences.insert("We are waiting for it to work...", "dir3/file2")
-    sentences.get_sentences().sort(key=lambda x: x.get_sentence())
+    # with open("technology_texts/python-3.8.4-docs-text/python-3.8.4-docs-text/bugs.txt", encoding="utf8") as file:
+    #     file_sentences = [line.rstrip() for line in file]
+    #     for sentence in file_sentences:
+    #         sentences.insert(sentence, "technology_texts/python-3.8.4-docs-text/python-3.8.4-docs-text/bugs.txt")
+
+
+    # print("loading the file and preparing the system...")
+    # root_dir = 'technology_texts/python-3.8.4-docs-text/python-3.8.4-docs-text/c-api'
+    #
+    # for subdir, dirs, files in os.walk(root_dir):
+    #     for file in files:
+    #         file_sentences = open(os.path.join('technology_texts/python-3.8.4-docs-text/python-3.8.4-docs-text/c-api',
+    #                                            file)).readlines()
+    #         file_sentences = [line.rstrip() for line in file_sentences]
+    #         for sentence in file_sentences:
+    #             sentences.insert(sentence, os.path.join(subdir, file))
+
+    sentences.get_sentences().sort(key=lambda x: x[0])
+    print("finished loading")
 
     # the function of iterating over files
     # for each file:
     # split sentences
     # insert into sentences
+    # sort
 
 
 def fill_substrings_dict(data):
-    sentences = data.get_sentences().get_sentences()
+    counter = 0
+    sentences = data.get_sentences()
     substrings_dict = data.get_substrings_dict()
-    for i in range(len(sentences)):
-        sentence = sentences[i].get_sentence()
-        for j in range(len(sentence)):
+    print(sentences.get_sentences())
+    for i, sentence in enumerate(sentences.get_sentences()):
+        alphabet.update(sentence[0])
+        for j in range(len(sentence[0])):
             for k in range(j):
-                substrings_dict.insert(sentence[k:j], i, k)
+                substrings_dict.insert(clean_string(sentence[0][k:j]), i, k)
+                print(counter)
+                counter += 1
 
-    print(substrings_dict.get_substrings_dict())
+    print("finished loading")
 
 
 def manipulate_data(data):
