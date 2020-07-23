@@ -13,4 +13,13 @@ class AutoCompleteData:
     def get_sentence_source(self):
         return self.__source_text
 
+    def __key(self):
+        return self.__completed_sentence, self.__source_text, self.__offset
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        return self.__key() == other.__key()
+
     # methods that you need to define by yourself

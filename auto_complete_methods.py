@@ -3,8 +3,7 @@ from auto_complete_data import AutoCompleteData
 from data import clean_string
 import itertools
 
-
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ']
+alphabet = "abcdefghijklmnopqrstuvwxyz "
 
 
 def get_input():
@@ -61,39 +60,33 @@ def find_deleted(data, _input, _index, num_required, score):
 
 
 def get_best_k_completions(data, _input, k):
-    best_k_completions = find_completion(data, _input, len(_input)*2)
-
-    if len(best_k_completions) < k:
-        for _index in range(4, len(_input)):
-            best_k_completions += [x for x in
-                                   find_replaced(data, _input, _index, k-len(best_k_completions), len(_input)*2 - 2)
-                                   if (x.get_completed_sentence(), x.get_sentence_source()) not in
-                                   [(y.get_completed_sentence(), y.get_sentence_source()) for y in best_k_completions]]
-            if len(best_k_completions) == k:
-                break
-
-    if len(best_k_completions) < k:
-        for _index in range(4, len(_input)):
-            best_k_completions += [x for x in
-                                   find_added(data, _input, _index, k-len(best_k_completions), len(_input)*2 - 2)
-                                   if (x.get_completed_sentence(), x.get_sentence_source()) not in
-                                   [(y.get_completed_sentence(), y.get_sentence_source()) for y in best_k_completions]]
-            if len(best_k_completions) == k:
-                break
-
-    if len(best_k_completions) < k:
-        for _index in range(4, len(_input)):
-            best_k_completions += [x for x in
-                                   find_deleted(data, _input, _index, k-len(best_k_completions), len(_input)*2 - 3)
-                                   if (x.get_completed_sentence(), x.get_sentence_source()) not in
-                                   [(y.get_completed_sentence(), y.get_sentence_source()) for y in best_k_completions]]
-            if len(best_k_completions) == k:
-                break
-
     decrement_scores = {"find_replaced": [6, 5, 4, 3, 2],
                         "find_deleted": [11, 9, 7, 5, 3],
                         "find_added": [10, 8, 6, 4, 2]}
     flag_max = 20
+
+    best_k_completions = set(find_completion(data, _input, len(_input)*2))
+
+    if len(best_k_completions) < k:
+        for _index in range(4, len(_input)):
+            best_k_completions.update(find_replaced(data, _input, _index, k-len(best_k_completions), len(_input)*2 - 2))
+
+            if len(best_k_completions) == k:
+                break
+
+    if len(best_k_completions) < k:
+        for _index in range(4, len(_input)):
+            best_k_completions.update(find_added(data, _input, _index, k-len(best_k_completions), len(_input)*2 - 2))
+
+            if len(best_k_completions) == k:
+                break
+
+    if len(best_k_completions) < k:
+        for _index in range(4, len(_input)):
+            best_k_completions.update(find_deleted(data, _input, _index, k-len(best_k_completions), len(_input)*2 - 3))
+
+            if len(best_k_completions) == k:
+                break
 
     while len(best_k_completions) < k:
         curr_min = min(list(itertools.chain.from_iterable(decrement_scores.values())))
@@ -104,13 +97,8 @@ def get_best_k_completions(data, _input, k):
             if curr_min in values:
                 index_of_min = values.index(curr_min)
                 values[values.index(curr_min)] = flag_max
-                best_k_completions += [x for x in
-                                       eval(action)(data, _input, index_of_min, k - len(best_k_completions),
-                                                    len(_input)*2-curr_min)
-                                       if (x.get_completed_sentence(), x.get_sentence_source()) not in
-                                       [(y.get_completed_sentence(), y.get_sentence_source()) for y in
-                                        best_k_completions]]
-
+                best_k_completions.update(eval(action)(data, _input, index_of_min, k - len(best_k_completions),
+                                                    len(_input)*2-curr_min))
                 if len(best_k_completions) == k:
                     return best_k_completions
 
@@ -138,3 +126,10 @@ def print_result(result):
 #         best_k_completions += eval(action)(index_of_min, _input, k-len(best_k_completions))
 #         break
 
+
+# += [x for x in
+#                                        eval(action)(data, _input, index_of_min, k - len(best_k_completions),
+#                                                     len(_input)*2-curr_min)
+#                                        if (x.get_completed_sentence(), x.get_sentence_source()) not in
+#                                        [(y.get_completed_sentence(), y.get_sentence_source()) for y in
+#                                         best_k_completions]]
