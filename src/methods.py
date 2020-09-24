@@ -1,6 +1,5 @@
-from data import Data
-from auto_complete_data import AutoCompleteData
-from data import clean_string
+from data.data import Data, clean_string
+from data.auto_complete_data import AutoCompleteData
 import itertools
 
 alphabet = "abcdefghijklmnopqrstuvwxyz "

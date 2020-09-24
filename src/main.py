@@ -1,4 +1,4 @@
-from data import Data
+from data.data import Data
 from initialization import manipulate_data
 from manager import start_app
 
